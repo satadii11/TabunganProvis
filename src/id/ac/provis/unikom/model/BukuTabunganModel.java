@@ -37,7 +37,7 @@ public class BukuTabunganModel extends MySQLConnection{
     private int idNasabah;
     private int saldoTambahan;
     private int SaldoYangDikurangi;
-    private String status;
+    private enumSTATUS status;
     
 
     public String getNomerRekening() {
@@ -74,7 +74,7 @@ public class BukuTabunganModel extends MySQLConnection{
         return SaldoYangDikurangi;
     }
     public String getStatus(){
-        return status;
+        return status.getString();
     }
     
     /**
@@ -82,10 +82,10 @@ public class BukuTabunganModel extends MySQLConnection{
      * @param stat 
      */
     public void setStatus(String stat){
-        if(status.equalsIgnoreCase("Aktif") || status.equalsIgnoreCase("Aktif")){
-           this.status = enumSTATUS.Aktif.getString();
-        }else if (status.equalsIgnoreCase("Ditutup")){
-            this.status = enumSTATUS.Ditutup.getString();
+        if(stat.equalsIgnoreCase("Aktif") || stat.equalsIgnoreCase("Aktif")){
+           this.status = enumSTATUS.Aktif;
+        }else if (stat.equalsIgnoreCase("Ditutup")){
+            this.status = enumSTATUS.Ditutup;
         }else{
             this.status = null;
         }
