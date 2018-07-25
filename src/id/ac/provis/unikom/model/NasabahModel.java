@@ -35,7 +35,7 @@ public class NasabahModel extends MySQLConnection{
     private String nama;
     private String alamat;
     private String noTelepon;
-    private String jenisKelamin;
+    private enumJK jenisKelamin;
     
     
 
@@ -72,7 +72,7 @@ public class NasabahModel extends MySQLConnection{
     }
         
     public String getJenisK() {
-        return jenisKelamin;
+        return jenisKelamin.getString();
     }
 
     /**
@@ -81,9 +81,9 @@ public class NasabahModel extends MySQLConnection{
      */
     public void setJenisKelamin(String jenisKelamin) {
         if (jenisKelamin.equalsIgnoreCase("Laki-laki") || jenisKelamin.equalsIgnoreCase("LakiLaki")) {
-            this.jenisKelamin = enumJK.LakiLaki.getString();
+            this.jenisKelamin = enumJK.LakiLaki;
         }else if (jenisKelamin.equalsIgnoreCase("Perempuan")){
-            this.jenisKelamin = enumJK.Perempuan.getString();
+            this.jenisKelamin = enumJK.Perempuan;
         }else{
             this.jenisKelamin = null;
         }
@@ -96,7 +96,7 @@ public class NasabahModel extends MySQLConnection{
             PreparedStatement statement = openConnection().prepareStatement(sql);
             statement.setInt(1, id);
             statement.setString(2, nama);
-            statement.setString(3, jenisKelamin);
+            statement.setString(3, jenisKelamin.getString());
             statement.setString(4, alamat);
             statement.setString(5, noTelepon);            
             statement.execute();            
