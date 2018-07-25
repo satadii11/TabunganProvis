@@ -131,9 +131,8 @@ public class NasabahModel extends MySQLConnection{
     }
     
     public boolean delete(){
-        String sql = "DELETE FROM Nasabah WHERE id = ?";
+        String sql = "DELETE FROM Nasabah WHERE id_nasabah = ?";
         try {
-            
             PreparedStatement statement = openConnection().prepareStatement(sql);
             statement.setInt(1, id);
             statement.execute();
@@ -148,17 +147,17 @@ public class NasabahModel extends MySQLConnection{
 
     public ArrayList<NasabahModel> findAll(){
         ArrayList<NasabahModel> result = new ArrayList<>();
-        String sql = "SELECT * FROM nasabah";        
+        String sql = "SELECT id_nasabah, nama, jenis_kelamin, alamat, no_telepon FROM Nasabah";        
         try {
             PreparedStatement statement = openConnection().prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {                
                 NasabahModel row = new NasabahModel();
-                row.setId(rs.getInt("id"));
+                row.setId(rs.getInt("id_nasabah"));
                 row.setNama(rs.getString("nama"));
-                row.setJenisKelamin(rs.getString("jenisKelamin"));
+                row.setJenisKelamin(rs.getString("jenis_kelamin"));
                 row.setAlamat(rs.getString("alamat"));
-                row.setNoTelepon(rs.getString("noTelepon"));
+                row.setNoTelepon(rs.getString("no_telepon"));
                 result.add(row);
             }
         } catch (SQLException e) {
