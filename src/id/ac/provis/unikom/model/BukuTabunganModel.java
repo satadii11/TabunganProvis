@@ -118,14 +118,14 @@ public class BukuTabunganModel extends MySQLConnection{
 
     public boolean update(){
         String sql = "UPDATE buku_tabungan"
-                +"SET nomor_rekening = '?' , pin = '?' , status = '?' , saldo = '?'"
+                +"SET nomor_rekening = '?' , pin = '?' , saldo = '?' , status = '?' "
                 +"WHERE id_nasabah = '?'";
             try {
                 PreparedStatement statement = openConnection().prepareStatement(sql);
                 statement.setString(1, nomerRekening);
-                statement.setString(2, pin);
-                statement.setString(3, status.getString());
-                statement.setInt(4, saldo);                
+                statement.setString(2, pin);                
+                statement.setInt(3, saldo);   
+                statement.setString(4, status.getString());
                 statement.setInt(5, idNasabah);
                 statement.execute();            
             } catch (SQLException ex) {
