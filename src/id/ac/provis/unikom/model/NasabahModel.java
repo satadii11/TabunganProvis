@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,7 +21,7 @@ enum enumJK {
     LakiLaki("Laki-laki"),
     Perempuan("Perempuan");
 
-    private String string;
+    private final String string;
     
     private enumJK(String s){
         this.string = s;
@@ -90,15 +91,14 @@ public class NasabahModel extends MySQLConnection{
     }
 
     public boolean save(){
-        String sql = "INSERT INTO Nasabah (id_nasabah, nama, jenis_kelamin, alamat, no_telepon) "+
-                     "VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Nasabah (nama, jenis_kelamin, alamat, no_telepon) "+
+                     "VALUES(?, ?, ?, ?)";
         try {
-            PreparedStatement statement = openConnection().prepareStatement(sql);
-            statement.setInt(1, id);
-            statement.setString(2, nama);
-            statement.setString(3, jenisKelamin.getString());
-            statement.setString(4, alamat);
-            statement.setString(5, noTelepon);            
+            PreparedStatement statement = openConnection().prepareStatement(sql);            
+            statement.setString(1, nama);
+            statement.setString(2, jenisKelamin.getString());
+            statement.setString(3, alamat);
+            statement.setString(4, noTelepon);            
             statement.execute();            
         } catch (SQLException e) {
 //            JOptionPane.showMessageDialog(null,"Error ketika menyimpan :" + e.getMessage());
@@ -116,7 +116,7 @@ public class NasabahModel extends MySQLConnection{
         try {
             PreparedStatement statement = openConnection().prepareCall(sql);
             statement.setString(1, nama);
-            statement.setObject(2, jenisKelamin);
+            statement.setString(2, jenisKelamin.getString());
             statement.setString(3, alamat);
             statement.setString(4, noTelepon);
             statement.setInt(5, id);
@@ -151,7 +151,7 @@ public class NasabahModel extends MySQLConnection{
         try {
             PreparedStatement statement = openConnection().prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {                
+            while (rs.next()) {
                 NasabahModel row = new NasabahModel();
                 row.setId(rs.getInt("id_nasabah"));
                 row.setNama(rs.getString("nama"));
