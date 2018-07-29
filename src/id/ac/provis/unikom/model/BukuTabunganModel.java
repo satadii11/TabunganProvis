@@ -118,7 +118,7 @@ public class BukuTabunganModel extends MySQLConnection{
 
     public boolean update(){
         String sql = "UPDATE buku_tabungan"
-                +"SET nomor_rekening = '?' , pin = '?' , saldo = '?' , status = '?' "
+                +"SET nomer_rekening = '?' , pin = '?' , saldo = '?' , status = '?' "
                 +"WHERE id_nasabah = '?'";
             try {
                 PreparedStatement statement = openConnection().prepareStatement(sql);
