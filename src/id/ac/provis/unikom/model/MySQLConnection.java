@@ -9,7 +9,7 @@ import java.sql.SQLException;
  */
 public abstract class MySQLConnection {    
     
-    private final String URL = "jdbc:mysql://localhost:3306/provis_tabungan";
+    private final String URL = "jdbc:mysql://localhost:3306/provis_tabungan?useSSl=false";
     private final String USERNAME = "root";
     private final String PASSWORD = "root";
     
