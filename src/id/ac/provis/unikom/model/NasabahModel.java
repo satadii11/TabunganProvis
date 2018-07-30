@@ -61,8 +61,7 @@ public class NasabahModel extends MySQLConnection {
     }
 
     public void setJenisKelamin(String jenisKelamin) {
-        this.jenisKelamin = JenisKelamin.valueOf(
-                jenisKelamin.toUpperCase().replace("-", ""));
+        this.jenisKelamin = JenisKelamin.valueOf(jenisKelamin.toUpperCase());
     }
 
     public boolean save() {
