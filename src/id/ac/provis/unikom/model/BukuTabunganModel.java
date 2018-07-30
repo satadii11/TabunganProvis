@@ -15,30 +15,29 @@ import javax.swing.JOptionPane;
  *
  * @author Akhsan
  */
-
-enum enumSTATUS{
-    Aktif  ("Aktif"),
-    Ditutup ("Ditutup");
-    
-    private final String string;
-    
-    private enumSTATUS(String s){
-       this.string = s;
-    }
-    public String getString(){
-        return string;
-    }
+enum Status {
+    AKTIF, DITUTUP
 }
-public class BukuTabunganModel extends MySQLConnection{
-    
+
+public class BukuTabunganModel extends MySQLConnection {
+    private static final String TABLE_NAME = "buku_tabungan";
+
     private String nomerRekening;
     private String pin;
     private int saldo;
-    private enumSTATUS status;
+    private Status status;
+    private String namaNasabah;
     private int idNasabah;
     private int saldoTambahan;
     private int SaldoYangDikurangi;
-    
+
+    public String getNamaNasabah() {
+        return namaNasabah;
+    }
+
+    public void setNamaNasabah(String namaNasabah) {
+        this.namaNasabah = namaNasabah;
+    }
     
     public String getNomerRekening() {
         return nomerRekening;
@@ -55,9 +54,11 @@ public class BukuTabunganModel extends MySQLConnection{
     public void setPin(String pin) {
         this.pin = pin;
     }
-    public int getSaldo(){
+
+    public int getSaldo() {
         return saldo;
     }
+
     public void setSaldo(int saldo) {
         this.saldo = saldo;
     }
@@ -69,112 +70,119 @@ public class BukuTabunganModel extends MySQLConnection{
     public void setIdNasabah(int idNasabah) {
         this.idNasabah = idNasabah;
     }
-    public void increaseSaldo(int saldoTambahan){
+
+    public void increaseSaldo(int saldoTambahan) {
         this.saldo += saldoTambahan;
     }
-    
-    public void decreaseSaldo(int SaldoYangDikurangi){
+
+    public void decreaseSaldo(int SaldoYangDikurangi) {
         this.saldo -= SaldoYangDikurangi;
-        
-    }
-    public String getStatus(){
-        return status.getString();
-    }
-    
-    /**
-     * 
-     * @param stat 
-     */
-    public void setStatus(String stat){
-        if(stat.equalsIgnoreCase("Aktif") || stat.equalsIgnoreCase("Aktif")){
-           this.status = enumSTATUS.Aktif;
-        }else if (stat.equalsIgnoreCase("Ditutup")){
-            this.status = enumSTATUS.Ditutup;
-        }else{
-            this.status = null;
-        }
-    }
-    
-    public boolean save(){
-        String sql = "INSERT INTO buku_tabungan (nomer_rekening, pin, saldo, status, id_nasabah)"
-                +"VALUES (?, ?, ?, ?, ?)";
-        
-            try {
-                PreparedStatement statement = openConnection().prepareStatement(sql);
-                statement.setString(1, nomerRekening);
-                statement.setString(2, pin);
-                statement.setInt(3, saldo);
-                statement.setString(4, status.getString());
-                statement.setInt(5, idNasabah);                
-                statement.execute();              
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erorr ketika menyimpan : "+ex.getMessage());
-                return false;
-            } finally{               
-                closeConnection();           
-            }
-             return true;
+
     }
 
-    public boolean update(){
-        String sql = "UPDATE buku_tabungan"
-                +"SET nomer_rekening = '?' , pin = '?' , saldo = '?' , status = '?' "
-                +"WHERE id_nasabah = '?'";
-            try {
-                PreparedStatement statement = openConnection().prepareStatement(sql);
-                statement.setString(1, nomerRekening);
-                statement.setString(2, pin);                
-                statement.setInt(3, saldo);   
-                statement.setString(4, status.getString());
-                statement.setInt(5, idNasabah);
-                statement.execute();            
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erorr ketika mengupdate : "+ex.getMessage());
-                return false;
-            } finally{
-                closeConnection();            
-            }   
-            return true;
+    public String getStatus() {
+        String status = this.status.toString().toLowerCase();
+        return Character.toUpperCase(status.charAt(0)) + status.substring(1);
     }
-    public boolean tutupTabungan(){
-        String sql = "UPDATE buku_tabungan"
-                +"SET  status = '?'"
-                +"WHERE id_nasabah = '?'";
-            try {
-                PreparedStatement statement = openConnection().prepareStatement(sql);
-                statement.setString(1, status.getString());              
-                statement.setInt(2, idNasabah);
-                statement.execute();            
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erorr ketika menutup tabungan : "+ex.getMessage());
-                return false;
-            } finally{
-                closeConnection();            
-            }   
-            return true;    
+
+    public void setStatus(String stat) {
+        this.status = Status.valueOf(stat.toUpperCase());
     }
-    public ArrayList<BukuTabunganModel> findAllByIdNasabah(){
-      ArrayList<BukuTabunganModel> result = new ArrayList<>();
-            String sql = "SELECT  * FROM buku_tabungan"
-                    +"WHERE id_nasabah= '?'";
+
+    public boolean save() {
+        String sql = "INSERT INTO " + TABLE_NAME + " (nomer_rekening, pin, "
+                + "saldo, status, id_nasabah) VALUES (?, ?, ?, ?, ?)";
+
         try {
-             PreparedStatement statement = openConnection().prepareStatement(sql);
-             ResultSet rs = statement.executeQuery();
-        while(rs.next()){
-            BukuTabunganModel row = new BukuTabunganModel();           
-            row.setNomerRekening(rs.getString("nomer_rekening"));
-            row.setPin(rs.getString("pin"));
-            row.setStatus(rs.getString("status"));
-            row.setSaldo(rs.getInt("saldo"));
-            row.setIdNasabah(rs.getInt("id_nasabah"));
-            result.add(row);
-        }
+            PreparedStatement statement = openConnection().prepareStatement(sql);
+            statement.setString(1, nomerRekening);
+            statement.setString(2, pin);
+            statement.setInt(3, saldo);
+            statement.setString(4, getStatus());
+            statement.setInt(5, idNasabah);
+            statement.execute();
         } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erorr ketika mengambil data nasabah : "+ex.getMessage());
-             
-            } finally{
-                closeConnection();            
-            }   
-        return  result;
+            JOptionPane.showMessageDialog(null, "Erorr ketika menyimpan : " + ex.getMessage());
+            return false;
+        } finally {
+            closeConnection();
+        }
+        return true;
+    }
+
+    public boolean update() {
+        String sql = "UPDATE " + TABLE_NAME + " SET nomer_rekening = ?, "
+                + "pin = ?, saldo = ?, status = ? WHERE id_nasabah = ?";
+        
+        boolean error = false;
+        try {
+            PreparedStatement statement = openConnection().prepareStatement(sql);
+            statement.setString(1, nomerRekening);
+            statement.setString(2, pin);
+            statement.setInt(3, saldo);
+            statement.setString(4, getStatus());
+            statement.setInt(5, idNasabah);
+            statement.execute();
+        } catch (SQLException ex) {
+            error = true;
+        } finally {
+            closeConnection();
+        }
+        return !error;
+    }
+
+    public boolean tutupTabungan() {
+        return updateStatus("Ditutup");
+    }
+    
+    public boolean bukaKembaliTabungan() {
+        return updateStatus("Aktif");
+    }
+    
+    private boolean updateStatus(String status) {
+        String sql = "UPDATE " + TABLE_NAME + " SET status = ? WHERE "
+                + "id_nasabah = ?";
+        
+        boolean error = false;
+        try {
+            PreparedStatement statement = openConnection().prepareStatement(sql);
+            statement.setString(1, status);
+            statement.setInt(2, idNasabah);
+            statement.execute();
+        } catch (SQLException ex) {
+            error = true;
+        } finally {
+            closeConnection();
+        }
+        return !error;
+    }
+
+    public ArrayList<BukuTabunganModel> findAllByIdNasabah() {
+        ArrayList<BukuTabunganModel> result = new ArrayList<>();
+        String sql = "SELECT nomer_rekening, status, saldo, pin, nama_nasabah, "
+                + "id_nasabah FROM " + TABLE_NAME + " JOIN nasabah USING "
+                + "(id_nasabah) WHERE id_nasabah = ?";
+        
+        try {
+            PreparedStatement statement = openConnection().prepareStatement(sql);
+            statement.setInt(1, idNasabah);
+            
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                BukuTabunganModel row = new BukuTabunganModel();
+                row.setNomerRekening(rs.getString("nomer_rekening"));
+                row.setPin(rs.getString("pin"));
+                row.setStatus(rs.getString("status"));
+                row.setSaldo(rs.getInt("saldo"));
+                row.setIdNasabah(rs.getInt("id_nasabah"));
+                row.setNamaNasabah("nama_nasabah");
+                result.add(row);
+            }
+        } catch (SQLException ex) {
+            result = null;
+        } finally {
+            closeConnection();
+        }
+        return result;
     }
 }
