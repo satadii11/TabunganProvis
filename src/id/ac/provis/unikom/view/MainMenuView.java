@@ -152,7 +152,8 @@ public class MainMenuView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPengambilanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPengambilanActionPerformed
-        
+        new PengambilanView().setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_btnPengambilanActionPerformed
 
     private void btnPenyetoranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPenyetoranActionPerformed
