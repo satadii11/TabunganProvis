@@ -124,8 +124,7 @@ public class NasabahModel extends MySQLConnection {
 
     public ArrayList<NasabahModel> findAll() {
         ArrayList<NasabahModel> result = new ArrayList<>();
-        String sql = "SELECT id_nasabah, nama_nasabah, jenis_kelamin, alamat, "
-                + "no_telepon FROM " + TABLE_NAME;
+        String sql = "SELECT * FROM " + TABLE_NAME;
         
         try {
             PreparedStatement statement = openConnection().prepareStatement(sql);
@@ -146,4 +145,38 @@ public class NasabahModel extends MySQLConnection {
         }
         return result;
     }
+    
+    public ArrayList<NasabahModel> cari(String query) {
+        ArrayList<NasabahModel> result = new ArrayList<>();
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE id_nasabah LIKE ? "
+                + "OR nama_nasabah LIKE ? OR jenis_kelamin LIKE ? OR alamat LIKE"
+                + " ? OR no_telepon LIKE ?";
+        
+        String queryLike = "%" + query + "%";
+        
+        try {
+            PreparedStatement statement = openConnection().prepareStatement(sql);
+            statement.setString(1, queryLike);
+            statement.setString(2, queryLike);
+            statement.setString(3, queryLike);
+            statement.setString(4, queryLike);
+            statement.setString(5, queryLike);
+
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                NasabahModel row = new NasabahModel();
+                row.setId(rs.getInt("id_nasabah"));
+                row.setNama(rs.getString("nama_nasabah"));
+                row.setJenisKelamin(rs.getString("jenis_kelamin"));
+                row.setAlamat(rs.getString("alamat"));
+                row.setNoTelepon(rs.getString("no_telepon"));
+                result.add(row);
+            }
+        } catch (SQLException e) {
+            result = null;
+        } finally {
+            closeConnection();
+        }
+        return result;
+    } 
 }

@@ -22,7 +22,9 @@ public class NasabahController {
         String jenisKelamin = view.getJenisKelamin()
                 .getSelectedItem().toString();
         
-        validateInput(view, nama, telepon, alamat);
+        if(!validateInput(view, nama, telepon, alamat)) {
+            return;
+        }
         
         nasabah.setNama(nama);
         nasabah.setNoTelepon(telepon);
@@ -31,7 +33,7 @@ public class NasabahController {
         if (!nasabah.save()) {
             view.showDialog("Terjadi kesalahan saat menyimpan data!");
         } else {
-            view.showDialog("Berhasil merubah data untuk nasabah "
+            view.showDialog("Berhasil menambahkan data baru untuk nasabah "
                     + "bernama " + nama);
         }
     }
@@ -53,7 +55,9 @@ public class NasabahController {
         String jenisKelamin = view.getJenisKelamin()
                 .getSelectedItem().toString();
         
-        validateInput(view, nama, telepon, alamat);
+        if(!validateInput(view, nama, telepon, alamat)) {
+            return;
+        }
         
         nasabah.setNama(nama);
         nasabah.setNoTelepon(telepon);
@@ -62,7 +66,7 @@ public class NasabahController {
         if (!nasabah.update()) {
             view.showDialog("Terjadi kesalahan saat menyimpan data!");
         } else {
-            view.showDialog("Berhasil menambahkan data baru untuk nasabah "
+            view.showDialog("Berhasil merubah data untuk nasabah "
                     + "bernama " + nama);
         }
     }
@@ -78,20 +82,26 @@ public class NasabahController {
         }
     }
     
-    private void validateInput(NasabahView view, String nama, String telepon, String alamat) {
+    private boolean validateInput(NasabahView view, String nama, String telepon, String alamat) {
         if (nama.isEmpty()) {
             view.showDialog("Isi dulu form untuk nama");
-            return;
+            return false;
         }
         
         if (telepon.isEmpty()) {
             view.showDialog("Isi dulu form untuk nomer telepon");
-            return;
+            return false;
         }
         
         if (alamat.isEmpty()) {
             view.showDialog("Isi dulu form untuk alamat");
-            return;
+            return false;
         }
+        
+        return true;
+    }
+
+    public ArrayList<NasabahModel> cari(NasabahView view) {
+        return nasabah.cari(view.getCari().getText());
     }
 }

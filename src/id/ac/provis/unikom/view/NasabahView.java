@@ -27,19 +27,8 @@ public class NasabahView extends BaseView {
     }
 
     private void initializeNasabahTable() {
-        tableModel.setRowCount(0);
         nasabahModels = controller.findAllNasabah();
-        
-        for (NasabahModel nasabah : nasabahModels) {
-            tableModel.addRow(new Object[] {
-                nasabah.getId(),
-                nasabah.getNama(),
-                nasabah.getJenisKelamin(),
-                nasabah.getNoTelepon(),
-                nasabah.getAlamat()
-            });
-        }
-        tableModel.fireTableDataChanged();
+        inflateTable();
     }
 
     public JTextField getNama() {
@@ -62,11 +51,29 @@ public class NasabahView extends BaseView {
         return tableNasabah;
     }
 
+    public JTextField getCari() {
+        return tfCari;
+    }
+    
     private void clearForm() {
         tfNama.setText("");
         taAlamat.setText("");
         tfTelepon.setText("");
         cbJk.setSelectedIndex(0);
+    }
+    
+    private void inflateTable() {
+        tableModel.setRowCount(0);
+        for (NasabahModel nasabah : nasabahModels) {
+            tableModel.addRow(new Object[] {
+                nasabah.getId(),
+                nasabah.getNama(),
+                nasabah.getJenisKelamin(),
+                nasabah.getNoTelepon(),
+                nasabah.getAlamat()
+            });
+        }
+        tableModel.fireTableDataChanged();
     }
     
     @SuppressWarnings("unchecked")
@@ -92,6 +99,7 @@ public class NasabahView extends BaseView {
         tfCari = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         btnKembali = new javax.swing.JButton();
+        btnTransaksi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -207,6 +215,7 @@ public class NasabahView extends BaseView {
         });
         tableNasabah.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tableNasabah.setGridColor(new java.awt.Color(0, 0, 0));
+        tableNasabah.setRowSorter(null);
         tableNasabah.setSelectionBackground(new java.awt.Color(68, 138, 255));
         tableNasabah.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableNasabah.getTableHeader().setReorderingAllowed(false);
@@ -224,6 +233,12 @@ public class NasabahView extends BaseView {
             tableNasabah.getColumnModel().getColumn(4).setPreferredWidth(100);
         }
 
+        tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfCariKeyTyped(evt);
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("CARI");
@@ -235,6 +250,17 @@ public class NasabahView extends BaseView {
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnKembaliActionPerformed(evt);
+            }
+        });
+
+        btnTransaksi.setBackground(new java.awt.Color(68, 138, 255));
+        btnTransaksi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnTransaksi.setForeground(new java.awt.Color(255, 255, 255));
+        btnTransaksi.setText("Lihat Transaksi");
+        btnTransaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTransaksiActionPerformed(evt);
             }
         });
 
@@ -275,7 +301,9 @@ public class NasabahView extends BaseView {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnHapus)))
+                        .addComponent(btnHapus)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTransaksi)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -313,7 +341,8 @@ public class NasabahView extends BaseView {
                         .addComponent(btnTambah))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnHapus)
-                        .addComponent(btnEdit)))
+                        .addComponent(btnEdit)
+                        .addComponent(btnTransaksi)))
                 .addGap(22, 22, 22)
                 .addComponent(btnKembali)
                 .addGap(13, 13, 13))
@@ -377,12 +406,22 @@ public class NasabahView extends BaseView {
         setVisible(false);
     }//GEN-LAST:event_btnKembaliActionPerformed
 
+    private void tfCariKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCariKeyTyped
+        nasabahModels = controller.cari(this);
+        inflateTable();
+    }//GEN-LAST:event_tfCariKeyTyped
+
+    private void btnTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransaksiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTransaksiActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
+    private javax.swing.JButton btnTransaksi;
     private javax.swing.JComboBox<String> cbJk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
