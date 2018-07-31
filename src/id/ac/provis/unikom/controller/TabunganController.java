@@ -137,4 +137,8 @@ public class TabunganController {
                     + "nomer rekening " + tabungan.getNomerRekening());
         }
     }
+
+    public ArrayList<BukuTabunganModel> cari(TabunganView view) {
+        return tabungan.cari(view.getCari().getText());
+    }
 }

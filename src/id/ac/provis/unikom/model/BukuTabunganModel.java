@@ -224,4 +224,39 @@ public class BukuTabunganModel extends MySQLConnection {
         }
         return bukuTabungan;
     }
+    
+    public ArrayList<BukuTabunganModel> cari(String query) {
+        ArrayList<BukuTabunganModel> result = new ArrayList<>();
+        String sql = "SELECT nomer_rekening, status, saldo, pin, nama_nasabah, "
+                + "id_nasabah FROM " + TABLE_NAME + " JOIN nasabah USING "
+                + "(id_nasabah) WHERE nomer_rekening LIKE ? OR status LIKE ? "
+                + "OR saldo LIKE ? OR nama_nasabah LIKE ?";
+        
+        String queryLike = "%" + query + "%";
+        
+        try {
+            PreparedStatement statement = openConnection().prepareStatement(sql);
+            statement.setString(1, queryLike);
+            statement.setString(2, queryLike);
+            statement.setString(3, queryLike);
+            statement.setString(4, queryLike);
+
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                BukuTabunganModel row = new BukuTabunganModel();
+                row.setNomerRekening(rs.getString("nomer_rekening"));
+                row.setPin(rs.getString("pin"));
+                row.setStatus(rs.getString("status"));
+                row.setSaldo(rs.getInt("saldo"));
+                row.setIdNasabah(rs.getInt("id_nasabah"));
+                row.setNamaNasabah(rs.getString("nama_nasabah"));
+                result.add(row);
+            }
+        } catch (SQLException e) {
+            result = null;
+        } finally {
+            closeConnection();
+        }
+        return result;
+    } 
 }

@@ -30,9 +30,12 @@ public class TabunganView extends BaseView {
     }
 
     private void initializeTabunganTable() {
-        tableModel.setRowCount(0);
         bukuTabunganModels = controller.findAllTabungan();
-        
+        inflateTable();
+    }
+
+    private void inflateTable() {
+        tableModel.setRowCount(0);
         for (BukuTabunganModel tabungan : bukuTabunganModels) {
             tableModel.addRow(new Object[] {
                 tabungan.getNamaNasabah(),
@@ -43,7 +46,7 @@ public class TabunganView extends BaseView {
         }
         tableModel.fireTableDataChanged();
     }
-
+    
     private void initializeCombobox() {
         nasabahModels = controller.findAllNasabah();
         for (NasabahModel nasabah : nasabahModels) {
@@ -71,6 +74,10 @@ public class TabunganView extends BaseView {
         return tableTabungan;
     }
     
+    public JTextField getCari() {
+        return tfCari;
+    }
+    
     private void clearForm() {
         cbNasabah.setSelectedIndex(0);
         tfSaldo.setText("");
@@ -93,12 +100,11 @@ public class TabunganView extends BaseView {
         btnUbah = new javax.swing.JButton();
         btnTutup = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        tfCari = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         cbNasabah = new javax.swing.JComboBox<>();
         pfPin = new javax.swing.JPasswordField();
         btnBuka = new javax.swing.JButton();
-        btnTransaksi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(244, 67, 54));
@@ -222,7 +228,12 @@ public class TabunganView extends BaseView {
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Cari");
 
-        jTextField11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfCari.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tfCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfCariKeyReleased(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -243,18 +254,6 @@ public class TabunganView extends BaseView {
         btnBuka.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBukaActionPerformed(evt);
-            }
-        });
-
-        btnTransaksi.setBackground(new java.awt.Color(68, 138, 255));
-        btnTransaksi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnTransaksi.setForeground(new java.awt.Color(255, 255, 255));
-        btnTransaksi.setText("Lihat Transasksi");
-        btnTransaksi.setToolTipText("");
-        btnTransaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnTransaksi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTransaksiActionPerformed(evt);
             }
         });
 
@@ -292,9 +291,7 @@ public class TabunganView extends BaseView {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnKembali))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -304,11 +301,10 @@ public class TabunganView extends BaseView {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
                     .addComponent(jLabel2)
-                    .addComponent(cbNasabah, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTransaksi))
+                    .addComponent(cbNasabah, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -392,21 +388,21 @@ public class TabunganView extends BaseView {
         initializeTabunganTable();
     }//GEN-LAST:event_btnBukaActionPerformed
 
-    private void btnTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransaksiActionPerformed
-        
-    }//GEN-LAST:event_btnTransaksiActionPerformed
-
     private void btnTutupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTutupActionPerformed
         controller.tutupTabungan(this);
         initializeTabunganTable();
     }//GEN-LAST:event_btnTutupActionPerformed
+
+    private void tfCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCariKeyReleased
+        bukuTabunganModels = controller.cari(this);
+        inflateTable();
+    }//GEN-LAST:event_tfCariKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuka;
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
-    private javax.swing.JButton btnTransaksi;
     private javax.swing.JButton btnTutup;
     private javax.swing.JButton btnUbah;
     private javax.swing.JComboBox<String> cbNasabah;
@@ -416,9 +412,9 @@ public class TabunganView extends BaseView {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField11;
     private javax.swing.JPasswordField pfPin;
     private javax.swing.JTable tableTabungan;
+    private javax.swing.JTextField tfCari;
     private javax.swing.JTextField tfSaldo;
     // End of variables declaration//GEN-END:variables
 }
