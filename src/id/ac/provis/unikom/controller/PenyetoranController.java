@@ -2,16 +2,16 @@ package id.ac.provis.unikom.controller;
 
 import id.ac.provis.unikom.model.BukuTabunganModel;
 import id.ac.provis.unikom.model.TransaksiModel;
-import id.ac.provis.unikom.view.PengambilanView;
+import id.ac.provis.unikom.view.PenyetoranView;
 
 /**
  * @author satadii11
  */
-public class PengambilanController {
+public class PenyetoranController {
     private TransaksiModel transaksi = new TransaksiModel();
     private BukuTabunganModel tabungan = new BukuTabunganModel();
     
-    public void insertPengambilan(PengambilanView view) {
+    public void insertPenyetoran(PenyetoranView view) {
         String nomerRekening = view.getNomerRekening().getText();
         String namaNasabah = view.getNamaNasabah().getText();
         String pin = String.valueOf(view.getPin().getPassword());
@@ -51,7 +51,7 @@ public class PengambilanController {
             view.showDialog("Berhasil melakukan pengambilan uang sejumlah " 
                     + jumlah);
             tabungan.setNomerRekening(nomerRekening);
-            tabungan.decreaseSaldo(totalAmbil);
+            tabungan.increaseSaldo(totalAmbil);
             tabungan.update();
             view.clearForm();
         } else {
@@ -59,7 +59,7 @@ public class PengambilanController {
         }
     }
     
-    public void findByNomerRekening(PengambilanView view) {
+    public void findByNomerRekening(PenyetoranView view) {
         tabungan.setNomerRekening(view.getNomerRekening().getText());
         BukuTabunganModel bukuTabungan = tabungan.findByNomerRekening();
         

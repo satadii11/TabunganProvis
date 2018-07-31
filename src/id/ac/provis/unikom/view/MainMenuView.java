@@ -157,7 +157,8 @@ public class MainMenuView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPengambilanActionPerformed
 
     private void btnPenyetoranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPenyetoranActionPerformed
-        // TODO add your handling code here:
+        new PenyetoranView().setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_btnPenyetoranActionPerformed
 
     private void btnNasabahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNasabahActionPerformed
