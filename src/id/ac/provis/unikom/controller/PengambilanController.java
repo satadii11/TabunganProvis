@@ -3,6 +3,8 @@ package id.ac.provis.unikom.controller;
 import id.ac.provis.unikom.model.BukuTabunganModel;
 import id.ac.provis.unikom.model.TransaksiModel;
 import id.ac.provis.unikom.view.PengambilanView;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author satadii11
@@ -47,6 +49,9 @@ public class PengambilanController {
         transaksi.setJumlah(totalAmbil);
         transaksi.setNomerRekening(nomerRekening);
         transaksi.setTipe("Pengambilan");
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        transaksi.setTanggal(sdf.format(new Date()));
         if (transaksi.save()) {
             view.showDialog("Berhasil melakukan pengambilan uang sejumlah " 
                     + jumlah);

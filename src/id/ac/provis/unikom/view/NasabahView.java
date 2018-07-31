@@ -214,7 +214,6 @@ public class NasabahView extends BaseView {
         });
         tableNasabah.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tableNasabah.setGridColor(new java.awt.Color(0, 0, 0));
-        tableNasabah.setRowSorter(null);
         tableNasabah.setSelectionBackground(new java.awt.Color(68, 138, 255));
         tableNasabah.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tableNasabah.getTableHeader().setReorderingAllowed(false);

@@ -3,6 +3,8 @@ package id.ac.provis.unikom.controller;
 import id.ac.provis.unikom.model.BukuTabunganModel;
 import id.ac.provis.unikom.model.TransaksiModel;
 import id.ac.provis.unikom.view.PenyetoranView;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author satadii11
@@ -39,23 +41,21 @@ public class PenyetoranController {
             return;
         }
         
-        if (totalAmbil > tabungan.getSaldo()) {
-            view.showDialog("Jumlah terlalu besar, uang tidak mencukupi");
-            return;
-        }
-        
         transaksi.setJumlah(totalAmbil);
         transaksi.setNomerRekening(nomerRekening);
-        transaksi.setTipe("Pengambilan");
+        transaksi.setTipe("Setor");
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        transaksi.setTanggal(sdf.format(new Date()));
         if (transaksi.save()) {
-            view.showDialog("Berhasil melakukan pengambilan uang sejumlah " 
+            view.showDialog("Berhasil melakukan penyetoran uang sejumlah " 
                     + jumlah);
             tabungan.setNomerRekening(nomerRekening);
             tabungan.increaseSaldo(totalAmbil);
             tabungan.update();
             view.clearForm();
         } else {
-            view.showDialog("Gagal melakukan pengambilan uang");
+            view.showDialog("Gagal melakukan penyetoran uang");
         }
     }
     
