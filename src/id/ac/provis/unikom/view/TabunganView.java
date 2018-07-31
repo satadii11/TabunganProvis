@@ -3,7 +3,9 @@ package id.ac.provis.unikom.view;
 import id.ac.provis.unikom.controller.TabunganController;
 import id.ac.provis.unikom.model.BukuTabunganModel;
 import id.ac.provis.unikom.model.NasabahModel;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
@@ -19,11 +21,13 @@ public class TabunganView extends BaseView {
     private ArrayList<NasabahModel> nasabahModels;
     private TabunganController controller;
     private DefaultTableModel tableModel;
+    private NumberFormat formatRupiah;
     
     public TabunganView() {
         initComponents();
         controller = new TabunganController();
         tableModel = (DefaultTableModel) tableTabungan.getModel();
+        formatRupiah = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
 
         initializeTabunganTable();
         initializeCombobox();
@@ -40,7 +44,7 @@ public class TabunganView extends BaseView {
             tableModel.addRow(new Object[] {
                 tabungan.getNamaNasabah(),
                 tabungan.getNomerRekening(),
-                tabungan.getSaldo(),
+                formatRupiah.format(tabungan.getSaldo()),
                 tabungan.getStatus()
             });
         }
