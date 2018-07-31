@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package id.ac.provis.unikom.model;
 
 import java.sql.PreparedStatement;
@@ -12,7 +7,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Akhsan
  */
 enum Status {
@@ -206,7 +200,7 @@ public class BukuTabunganModel extends MySQLConnection {
     
     public BukuTabunganModel findByNomerRekening() {
         BukuTabunganModel bukuTabungan = new BukuTabunganModel();
-        String sql = "SELECT saldo, id_nasabah, nama_nasabah FROM " 
+        String sql = "SELECT saldo, id_nasabah, nama_nasabah, pin FROM " 
                 + TABLE_NAME + " JOIN nasabah USING (id_nasabah) WHERE "
                 + "nomer_rekening = ?";
         
@@ -219,6 +213,9 @@ public class BukuTabunganModel extends MySQLConnection {
                 bukuTabungan.setSaldo(rs.getInt("saldo"));
                 bukuTabungan.setIdNasabah(rs.getInt("id_nasabah"));
                 bukuTabungan.setNamaNasabah(rs.getString("nama_nasabah"));
+                bukuTabungan.setPin(rs.getString("pin"));
+            } else {
+                bukuTabungan = null;
             }
         } catch (SQLException ex) {
             bukuTabungan = null;
